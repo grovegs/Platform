@@ -14,13 +14,13 @@ public sealed class DisplayTests
     public DisplayTests()
     {
         _device = new TestDisplayDevice();
-        _display = new Display(_device, DefaultFrameRate, SleepTimeout.SystemSetting);
+        _display = new Display(_device, new PlatformSettings(DefaultFrameRate, SleepTimeout.SystemSetting));
     }
 
     [Fact]
     public void Constructor_Settings_AppliesTargetFrameRate()
     {
-        var display = new Display(_device, FrameRate, SleepTimeout.SystemSetting);
+        var display = new Display(_device, new PlatformSettings(FrameRate, SleepTimeout.SystemSetting));
 
         Assert.Equal(FrameRate, display.TargetFrameRate);
     }
@@ -36,7 +36,7 @@ public sealed class DisplayTests
     [Fact]
     public void Constructor_SettingsNeverSleep_KeepsScreenOn()
     {
-        var display = new Display(_device, DefaultFrameRate, SleepTimeout.NeverSleep);
+        var display = new Display(_device, new PlatformSettings(DefaultFrameRate, SleepTimeout.NeverSleep));
 
         Assert.Equal(SleepTimeout.NeverSleep, display.SleepTimeout);
         Assert.True(display.KeepScreenOn);
@@ -45,7 +45,7 @@ public sealed class DisplayTests
     [Fact]
     public void Constructor_SettingsTimed_UsesConfiguredSeconds()
     {
-        var display = new Display(_device, DefaultFrameRate, SleepTimeout.FromSeconds(TimeoutSeconds));
+        var display = new Display(_device, new PlatformSettings(DefaultFrameRate, SleepTimeout.FromSeconds(TimeoutSeconds)));
 
         Assert.Equal(SleepTimeout.FromSeconds(TimeoutSeconds), display.SleepTimeout);
         Assert.True(display.KeepScreenOn);

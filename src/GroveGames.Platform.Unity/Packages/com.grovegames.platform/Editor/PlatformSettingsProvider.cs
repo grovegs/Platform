@@ -42,7 +42,7 @@ namespace GroveGames.Platform.Unity.Editor
 
                     var assetField = new ObjectField("Settings Asset")
                     {
-                        objectType = typeof(PlatformSettings),
+                        objectType = typeof(UnityPlatformSettings),
                         value = settings,
                         style = { marginBottom = 10 }
                     };

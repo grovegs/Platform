@@ -10,35 +10,35 @@ namespace GroveGames.Platform.Unity.Editor
     {
         public const string AssetPath = "Assets/Settings/GroveGames/PlatformSettings.asset";
 
-        public static PlatformSettings GetOrCreate()
+        public static UnityPlatformSettings GetOrCreate()
         {
-            if (!EditorBuildSettings.TryGetConfigObject(PlatformSettings.ConfigName, out PlatformSettings settings) || settings == null)
+            if (!EditorBuildSettings.TryGetConfigObject(UnityPlatformSettings.ConfigName, out UnityPlatformSettings settings) || settings == null)
             {
                 settings = LoadOrCreate();
-                EditorBuildSettings.AddConfigObject(PlatformSettings.ConfigName, settings, true);
+                EditorBuildSettings.AddConfigObject(UnityPlatformSettings.ConfigName, settings, true);
             }
 
             Preload(settings);
             return settings;
         }
 
-        private static PlatformSettings LoadOrCreate()
+        private static UnityPlatformSettings LoadOrCreate()
         {
             CreateFolder();
 
-            var settings = AssetDatabase.LoadAssetAtPath<PlatformSettings>(AssetPath);
+            var settings = AssetDatabase.LoadAssetAtPath<UnityPlatformSettings>(AssetPath);
 
             if (settings != null)
             {
                 return settings;
             }
 
-            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PlatformSettings>(), AssetPath);
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<UnityPlatformSettings>(), AssetPath);
             AssetDatabase.SaveAssets();
-            return AssetDatabase.LoadAssetAtPath<PlatformSettings>(AssetPath);
+            return AssetDatabase.LoadAssetAtPath<UnityPlatformSettings>(AssetPath);
         }
 
-        private static void Preload(PlatformSettings settings)
+        private static void Preload(UnityPlatformSettings settings)
         {
             var preloaded = PlayerSettings.GetPreloadedAssets();
             var assets = new List<Object>(preloaded.Length + 1);
@@ -48,7 +48,7 @@ namespace GroveGames.Platform.Unity.Editor
             {
                 var asset = preloaded[i];
 
-                if (asset is PlatformSettings && asset != settings)
+                if (asset is UnityPlatformSettings && asset != settings)
                 {
                     continue;
                 }

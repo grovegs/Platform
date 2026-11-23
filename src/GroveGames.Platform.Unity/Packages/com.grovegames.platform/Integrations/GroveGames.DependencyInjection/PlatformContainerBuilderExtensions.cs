@@ -30,10 +30,11 @@ namespace GroveGames.Platform.Unity
 
         public static IContainerBuilder AddDisplay(this IContainerBuilder builder)
         {
-            var settings = PlatformSettings.GetOrCreate();
+            var settings = UnityPlatformSettings.GetOrCreate();
             builder.AddSingleton(settings);
+            builder.AddSingleton<IPlatformSettings>(settings);
             builder.AddSingleton<IDisplayDevice, UnityDisplayDevice>();
-            builder.AddSingleton(resolver => new Display(resolver.Resolve<IDisplayDevice>(), settings.TargetFrameRate, settings.SleepTimeout));
+            builder.AddSingleton(resolver => new Display(resolver.Resolve<IDisplayDevice>(), settings));
             builder.AddSingleton<IDisplay>(resolver => resolver.Resolve<Display>());
             return builder.AddSingleton<DisplayUpdater>();
         }

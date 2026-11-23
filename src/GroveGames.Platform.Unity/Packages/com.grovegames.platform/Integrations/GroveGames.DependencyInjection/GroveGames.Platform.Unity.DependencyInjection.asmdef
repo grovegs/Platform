@@ -1,0 +1,31 @@
+{
+    "name": "GroveGames.Platform.Unity.DependencyInjection",
+    "rootNamespace": "GroveGames.Platform.Unity",
+    "references": [
+        "GUID:0061d69520314709954536f1b0695e12",
+        "GUID:680da9f8e63646ddb3c20c2f4045387d",
+        "GroveGames.Platform.Unity.Database"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "GROVEGAMES_DEPENDENCYINJECTION"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.grovegames.dependencyinjection",
+            "expression": "0.6.0",
+            "define": "GROVEGAMES_DEPENDENCYINJECTION"
+        },
+        {
+            "name": "com.grovegames.database",
+            "expression": "0.3.0",
+            "define": "GROVEGAMES_DATABASE"
+        }
+    ],
+    "noEngineReferences": false
+}

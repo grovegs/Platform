@@ -1,0 +1,25 @@
+{
+    "name": "GroveGames.Platform.Unity.Editor.Tests",
+    "rootNamespace": "GroveGames.Platform.Unity.Editor.Tests",
+    "references": [
+        "GroveGames.Platform.Unity",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "GroveGames.Platform.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

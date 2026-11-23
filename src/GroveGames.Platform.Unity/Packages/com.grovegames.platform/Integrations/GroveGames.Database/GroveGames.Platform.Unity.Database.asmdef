@@ -1,0 +1,28 @@
+{
+    "name": "GroveGames.Platform.Unity.Database",
+    "rootNamespace": "GroveGames.Platform.Unity",
+    "references": [
+        "GroveGames.Platform.Unity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "GroveGames.Platform.dll",
+        "GroveGames.Database.dll",
+        "GroveGames.Serialization.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "GROVEGAMES_DATABASE"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.grovegames.database",
+            "expression": "0.3.0",
+            "define": "GROVEGAMES_DATABASE"
+        }
+    ],
+    "noEngineReferences": true
+}

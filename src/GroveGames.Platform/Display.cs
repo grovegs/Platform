@@ -11,15 +11,16 @@ public sealed class Display : IDisplay
     public SleepTimeout SleepTimeout => _sleepTimeout;
     public bool KeepScreenOn => _keepScreenOn;
 
-    public Display(IDisplayDevice device, int targetFrameRate, SleepTimeout sleepTimeout)
+    public Display(IDisplayDevice device, IPlatformSettings settings)
     {
         ArgumentNullException.ThrowIfNull(device);
+        ArgumentNullException.ThrowIfNull(settings);
 
         _device = device;
-        _sleepTimeout = sleepTimeout;
+        _sleepTimeout = settings.SleepTimeout;
         _idleTime = 0f;
         _keepScreenOn = false;
-        SetTargetFrameRate(targetFrameRate);
+        SetTargetFrameRate(settings.TargetFrameRate);
         UpdateKeepScreenOn();
     }
 

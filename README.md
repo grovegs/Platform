@@ -12,9 +12,10 @@ Application state, display settings, a clock that resists device time changes, a
 - `IApplication`: `Active`, `Inactive` and `Background`, with a `StateChanged` event, worked out from pause and focus
 - `IDisplay`: the target frame rate, and a screen sleep timeout that can be the system setting, never, or a number of idle seconds
 - `IClock`: UTC time that starts from the device time once and then follows the device's boot clock, so changing the device time does not move it
+- `IPlatformSettings`: the target frame rate and sleep timeout a display starts with, with `PlatformSettings` as the plain implementation
 - `Environment`: editor, development or production, with the app version and a version name
 - Each of these talks to the platform through one small interface: `IApplicationDevice`, `IDisplayDevice`, `IClockDevice`, `IClockStorage`
-- Unity: the devices for the Editor, Android and iOS, clock storage in PlayerPrefs or GroveGames.Database, and a settings asset
+- Unity: the devices for the Editor, Android and iOS, clock storage in PlayerPrefs or GroveGames.Database, and `UnityPlatformSettings`, the same settings as an asset
 
 ## .NET
 
@@ -36,7 +37,7 @@ var clock = new Clock(new SystemClockDevice(), clockStorage, application);
 var now = clock.UtcNow;
 var fireTime = clock.GetDeviceTime(now.AddHours(8));
 
-var display = new Display(displayDevice, targetFrameRate: 60, SleepTimeout.FromSeconds(120f));
+var display = new Display(displayDevice, new PlatformSettings(targetFrameRate: 60, SleepTimeout.FromSeconds(120f)));
 display.Update(deltaTime);
 ```
 
@@ -79,7 +80,7 @@ builder.AddDisplay();
 ```
 
 - `AddClock()` needs `AddApplication()`. With [GroveGames.Database](https://github.com/grovegs/Database) installed it stores its state there and needs the database registered; otherwise it uses PlayerPrefs.
-- The default target frame rate and sleep timeout are in Project Settings > GroveGames > Platform.
+- The default target frame rate and sleep timeout are in Project Settings > GroveGames > Platform, stored in a `UnityPlatformSettings` asset, which implements `IPlatformSettings`.
 - `UnityEnvironment.IsEditor`, `IsDevelopment` and `IsProduction` are constants, so the compiler removes the branch that does not apply. A build is a development build when the `DEVELOPMENT` symbol is defined. `UnityEnvironment.Current` is the same information as a core `Environment`.
 
 ## Development

@@ -7,18 +7,18 @@ public sealed class ClockTests : IDisposable
 {
     private static readonly DateTime s_start = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
-    private readonly TestClockStorage _storage;
-    private readonly TestApplicationDevice _applicationDevice;
+    private readonly FakeClockStorage _storage;
+    private readonly FakeApplicationDevice _applicationDevice;
     private readonly Application _application;
-    private readonly TestClockDevice _device;
+    private readonly FakeClockDevice _device;
     private readonly List<Clock> _clocks;
 
     public ClockTests()
     {
-        _storage = new TestClockStorage();
-        _applicationDevice = new TestApplicationDevice(true);
+        _storage = new FakeClockStorage();
+        _applicationDevice = new FakeApplicationDevice(true);
         _application = new Application(_applicationDevice);
-        _device = new TestClockDevice();
+        _device = new FakeClockDevice();
         _clocks = new List<Clock>();
     }
 
@@ -243,7 +243,7 @@ public sealed class ClockTests : IDisposable
         return clock;
     }
 
-    private sealed class TestApplicationDevice : IApplicationDevice
+    private sealed class FakeApplicationDevice : IApplicationDevice
     {
         private readonly bool _isFocused;
         private int _quitCount;
@@ -253,7 +253,7 @@ public sealed class ClockTests : IDisposable
 
         public bool IsFocused => _isFocused;
 
-        public TestApplicationDevice(bool isFocused)
+        public FakeApplicationDevice(bool isFocused)
         {
             _isFocused = isFocused;
         }
@@ -276,7 +276,7 @@ public sealed class ClockTests : IDisposable
         }
     }
 
-    private sealed class TestClockDevice : IClockDevice
+    private sealed class FakeClockDevice : IClockDevice
     {
         private DateTime _utcNow = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         private TimeSpan _timeSinceBoot = TimeSpan.FromHours(5d);
@@ -304,7 +304,7 @@ public sealed class ClockTests : IDisposable
         }
     }
 
-    private sealed class TestClockStorage : IClockStorage
+    private sealed class FakeClockStorage : IClockStorage
     {
         private ClockAnchor _anchor;
         private bool _hasAnchor;

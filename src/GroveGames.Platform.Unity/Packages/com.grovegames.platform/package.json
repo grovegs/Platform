@@ -1,6 +1,6 @@
 {
   "name": "com.grovegames.platform",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "GroveGames.Platform",
   "description": "Application state, display settings, a clock that resists device time changes, and the build environment for .NET and Unity",
   "unity": "2022.3",

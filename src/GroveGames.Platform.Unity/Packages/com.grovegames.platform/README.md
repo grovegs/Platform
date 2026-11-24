@@ -16,6 +16,7 @@ Application state, display settings, a clock that resists device time changes, a
 - `Environment`: editor, development or production, with the app version and a version name
 - Each of these talks to the platform through one small interface: `IApplicationDevice`, `IDisplayDevice`, `IClockDevice`, `IClockStorage`
 - Unity: the devices for the Editor, Android and iOS, clock storage in PlayerPrefs or GroveGames.Database, and `UnityPlatformSettings`, the same settings as an asset
+- Test doubles for your own tests: `FakeApplication`, `FakeClock` and `FakeDisplay` in the editor-only `GroveGames.Platform.Unity.Testing` assembly
 
 ## .NET
 

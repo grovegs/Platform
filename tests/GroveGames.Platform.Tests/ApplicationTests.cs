@@ -4,13 +4,13 @@ namespace GroveGames.Platform.Tests;
 
 public sealed class ApplicationTests : IDisposable
 {
-    private readonly TestApplicationDevice _device;
+    private readonly FakeApplicationDevice _device;
     private readonly Application _application;
     private readonly List<ApplicationStateChangedEvent> _events;
 
     public ApplicationTests()
     {
-        _device = new TestApplicationDevice(true);
+        _device = new FakeApplicationDevice(true);
         _application = new Application(_device);
         _events = new List<ApplicationStateChangedEvent>();
         _application.StateChanged += _events.Add;
@@ -30,7 +30,7 @@ public sealed class ApplicationTests : IDisposable
     [Fact]
     public void Constructor_Unfocused_IsInactive()
     {
-        var device = new TestApplicationDevice(false);
+        var device = new FakeApplicationDevice(false);
 
         var application = new Application(device);
 
@@ -124,7 +124,7 @@ public sealed class ApplicationTests : IDisposable
         Assert.Equal(1, _device.QuitCount);
     }
 
-    private sealed class TestApplicationDevice : IApplicationDevice
+    private sealed class FakeApplicationDevice : IApplicationDevice
     {
         private readonly bool _isFocused;
         private int _quitCount;
@@ -134,7 +134,7 @@ public sealed class ApplicationTests : IDisposable
 
         public bool IsFocused => _isFocused;
 
-        public TestApplicationDevice(bool isFocused)
+        public FakeApplicationDevice(bool isFocused)
         {
             _isFocused = isFocused;
         }

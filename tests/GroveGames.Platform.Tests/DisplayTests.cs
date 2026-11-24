@@ -8,12 +8,12 @@ public sealed class DisplayTests
     private const int FrameRate = 45;
     private const int DefaultFrameRate = 60;
 
-    private readonly TestDisplayDevice _device;
+    private readonly FakeDisplayDevice _device;
     private readonly Display _display;
 
     public DisplayTests()
     {
-        _device = new TestDisplayDevice();
+        _device = new FakeDisplayDevice();
         _display = new Display(_device, new PlatformSettings(DefaultFrameRate, SleepTimeout.SystemSetting));
     }
 
@@ -235,7 +235,7 @@ public sealed class DisplayTests
         Assert.Equal(0, _device.KeepScreenOnChangeCount);
     }
 
-    private sealed class TestDisplayDevice : IDisplayDevice
+    private sealed class FakeDisplayDevice : IDisplayDevice
     {
         private bool _hasInput;
         private int _targetFrameRate;

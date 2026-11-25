@@ -11,9 +11,9 @@ namespace GroveGames.Platform.Unity
             _target = target;
         }
 
-        public void FrameUpdate(float deltaTime)
+        public void FrameUpdate(DeltaTime deltaTime)
         {
-            _target.Update(UnityEngine.Time.unscaledDeltaTime);
+            _target.Update(deltaTime.Unscaled);
         }
     }
 }

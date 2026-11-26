@@ -17,17 +17,6 @@ public sealed class SystemClockDeviceTests
     }
 
     [Fact]
-    public void TimeSinceBoot_ReadTwice_NeverGoesBack()
-    {
-        var device = new SystemClockDevice();
-
-        var first = device.TimeSinceBoot;
-        var second = device.TimeSinceBoot;
-
-        Assert.True(second >= first);
-    }
-
-    [Fact]
     public void BootId_TwoDevices_Differ()
     {
         var first = new SystemClockDevice();

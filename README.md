@@ -46,7 +46,7 @@ display.Update(deltaTime);
 - After a reboot the clock takes the device time again, but never goes back before the time it saved. It saves when the application leaves `Active` and when it is disposed.
 - A time handed to the operating system, such as a notification's fire time, goes through `GetDeviceTime` first.
 - With a timed sleep timeout, call `Display.Update` every frame. It keeps the screen on while there is input and releases it after the idle seconds.
-- `SystemClockDevice` counts from process start. It is the device for platforms that have no boot clock.
+- `SystemClockDevice` counts from process start with a monotonic timer, so changing the system clock does not move it. It is the device for platforms that have no boot clock, such as the Editor, desktop and WebGL. On macOS and Linux that timer stops while the computer sleeps, so the time falls behind by the sleep until the next launch.
 
 ## Unity
 

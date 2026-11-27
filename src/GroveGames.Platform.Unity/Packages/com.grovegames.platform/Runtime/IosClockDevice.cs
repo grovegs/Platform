@@ -27,6 +27,11 @@ namespace GroveGames.Platform.Unity
             var buffer = new byte[BootIdCapacity];
             var length = GroveGamesPlatform_GetBootId(buffer, buffer.Length);
             _bootId = Encoding.ASCII.GetString(buffer, 0, length);
+
+            if (_bootId.Length == 0)
+            {
+                UnityEngine.Debug.LogWarning("The boot session id is unavailable, so moving the device clock while the game is closed changes the game clock.");
+            }
         }
     }
 }

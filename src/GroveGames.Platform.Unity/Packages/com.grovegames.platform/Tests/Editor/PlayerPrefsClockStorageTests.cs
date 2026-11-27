@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace GroveGames.Platform.Unity.Editor.Tests
 {
@@ -50,6 +51,18 @@ namespace GroveGames.Platform.Unity.Editor.Tests
             Assert.That(anchor.UtcNow.Kind, Is.EqualTo(DateTimeKind.Utc));
             Assert.That(anchor.TimeSinceBoot, Is.EqualTo(expected.TimeSinceBoot));
             Assert.That(anchor.BootId, Is.EqualTo(expected.BootId));
+        }
+
+        [Test]
+        public void TryLoad_EditedTicks_ReturnsFalseWithAWarning()
+        {
+            new PlayerPrefsClockStorage().Save(new ClockAnchor(new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(1d), "boot-1"));
+            PlayerPrefs.SetInt(s_keys[0], -1);
+
+            LogAssert.Expect(LogType.Warning, "The saved clock state is invalid, so the clock starts from the device time.");
+            var loaded = new PlayerPrefsClockStorage().TryLoad(out _);
+
+            Assert.That(loaded, Is.False);
         }
 
         private static void DeleteKeys()

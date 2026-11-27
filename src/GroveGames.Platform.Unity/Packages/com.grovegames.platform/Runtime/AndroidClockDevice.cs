@@ -1,5 +1,6 @@
 #if UNITY_ANDROID && !UNITY_EDITOR
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace GroveGames.Platform.Unity
         private const int BootTimeClockId = 7;
         private const long NanosecondsPerTick = 100L;
         private const string BootCountKey = "boot_count";
+        private const string InstallIdFileName = "grovegames-platform-install-id";
 
         [DllImport("libc", EntryPoint = "clock_gettime")]
         private static extern int GetClockTime(int clockId, [Out] IntPtr[] time);
@@ -49,18 +51,51 @@ namespace GroveGames.Platform.Unity
 
                 if (activity == null)
                 {
-                    return string.Empty;
+                    return Unavailable();
                 }
 
                 using var contentResolver = activity.Call<AndroidJavaObject>("getContentResolver");
                 using var settings = new AndroidJavaClass("android.provider.Settings$Global");
                 var bootCount = settings.CallStatic<int>("getInt", contentResolver, BootCountKey, 0);
-                return bootCount > 0 ? bootCount.ToString() : string.Empty;
+
+                if (bootCount <= 0)
+                {
+                    return Unavailable();
+                }
+
+                using var noBackupFilesDir = activity.Call<AndroidJavaObject>("getNoBackupFilesDir");
+                return GetInstallId(noBackupFilesDir.Call<string>("getAbsolutePath")) + ":" + bootCount.ToString();
             }
-            catch (AndroidJavaException)
+            catch (Exception exception)
             {
-                return string.Empty;
+                Debug.LogException(exception);
+                return Unavailable();
             }
+        }
+
+        private static string GetInstallId(string folder)
+        {
+            var path = Path.Combine(folder, InstallIdFileName);
+
+            if (File.Exists(path))
+            {
+                var stored = File.ReadAllText(path);
+
+                if (stored.Length > 0)
+                {
+                    return stored;
+                }
+            }
+
+            var installId = Guid.NewGuid().ToString("N");
+            File.WriteAllText(path, installId);
+            return installId;
+        }
+
+        private static string Unavailable()
+        {
+            Debug.LogWarning("The boot count is unavailable, so moving the device clock while the game is closed changes the game clock.");
+            return string.Empty;
         }
     }
 }

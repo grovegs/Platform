@@ -44,6 +44,9 @@ display.Update(deltaTime);
 
 - The application is `Background` while paused, `Active` while focused and `Inactive` otherwise.
 - After a reboot the clock takes the device time again, but never goes back before the time it saved. It saves when the application leaves `Active` and when it is disposed.
+- A reboot is detected by the device's boot id. On Android it is the boot count with a random install id kept in the app's no-backup folder, so a backup restored to another device never matches. When a device cannot provide one, a warning is logged and every launch takes the device time, so moving the clock while the game is closed then moves the game clock too.
+- Saved clock state that is out of range is ignored, and a failure to load or save it is logged, so `UtcNow` never throws because of storage.
+- Read the clock on the main thread.
 - A time handed to the operating system, such as a notification's fire time, goes through `GetDeviceTime` first.
 - With a timed sleep timeout, call `Display.Update` every frame. It keeps the screen on while there is input and releases it after the idle seconds.
 - `SystemClockDevice` counts from process start with a monotonic timer, so changing the system clock does not move it. It is the device for platforms that have no boot clock, such as the Editor, desktop and WebGL. On macOS and Linux that timer stops while the computer sleeps, so the time falls behind by the sleep until the next launch.
@@ -80,7 +83,7 @@ builder.AddClock();
 builder.AddDisplay();
 ```
 
-- `AddClock()` needs `AddApplication()`. With [GroveGames.Database](https://github.com/grovegs/Database) installed it stores its state there and needs the database registered; otherwise it uses PlayerPrefs.
+- `AddClock()` needs `AddApplication()`. With [GroveGames.Database](https://github.com/grovegs/Database) installed it stores its state there and needs the database registered; otherwise it uses PlayerPrefs. State saved in PlayerPrefs is not moved to the database, so the first launch after adding GroveGames.Database takes the device time.
 - The default target frame rate and sleep timeout are in Project Settings > GroveGames > Platform, stored in a `UnityPlatformSettings` asset, which implements `IPlatformSettings`.
 - `UnityEnvironment.IsEditor`, `IsDevelopment` and `IsProduction` are constants, so the compiler removes the branch that does not apply. A build is a development build when the `DEVELOPMENT` symbol is defined. `UnityEnvironment.Current` is the same information as a core `Environment`.
 

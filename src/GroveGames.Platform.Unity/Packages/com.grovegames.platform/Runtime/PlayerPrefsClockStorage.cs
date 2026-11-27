@@ -21,18 +21,33 @@ namespace GroveGames.Platform.Unity
                 return false;
             }
 
-            var utcNow = new DateTime(GetInt64(UtcNowHighKey, UtcNowLowKey), DateTimeKind.Utc);
-            var timeSinceBoot = new TimeSpan(GetInt64(TimeSinceBootHighKey, TimeSinceBootLowKey));
-            anchor = new ClockAnchor(utcNow, timeSinceBoot, PlayerPrefs.GetString(BootIdKey));
+            var utcNowTicks = GetInt64(UtcNowHighKey, UtcNowLowKey);
+            var timeSinceBootTicks = GetInt64(TimeSinceBootHighKey, TimeSinceBootLowKey);
+
+            if (utcNowTicks < DateTime.MinValue.Ticks || utcNowTicks > DateTime.MaxValue.Ticks || timeSinceBootTicks < 0L)
+            {
+                Debug.LogWarning("The saved clock state is invalid, so the clock starts from the device time.");
+                anchor = default;
+                return false;
+            }
+
+            anchor = new ClockAnchor(new DateTime(utcNowTicks, DateTimeKind.Utc), new TimeSpan(timeSinceBootTicks), PlayerPrefs.GetString(BootIdKey));
             return true;
         }
 
         public void Save(ClockAnchor anchor)
         {
-            SetInt64(UtcNowHighKey, UtcNowLowKey, anchor.UtcNow.Ticks);
-            SetInt64(TimeSinceBootHighKey, TimeSinceBootLowKey, anchor.TimeSinceBoot.Ticks);
-            PlayerPrefs.SetString(BootIdKey, anchor.BootId);
-            PlayerPrefs.Save();
+            try
+            {
+                SetInt64(UtcNowHighKey, UtcNowLowKey, anchor.UtcNow.Ticks);
+                SetInt64(TimeSinceBootHighKey, TimeSinceBootLowKey, anchor.TimeSinceBoot.Ticks);
+                PlayerPrefs.SetString(BootIdKey, anchor.BootId);
+                PlayerPrefs.Save();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
         }
 
         private static long GetInt64(string highKey, string lowKey)

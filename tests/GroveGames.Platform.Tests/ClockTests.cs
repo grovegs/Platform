@@ -236,6 +236,16 @@ public sealed class ClockTests : IDisposable
         Assert.Equal(s_start.AddHours(3d), deviceTime);
     }
 
+    [Fact]
+    public void UtcNow_StoredTimeNearTheEndOfTime_IgnoresItAndReturnsDeviceTime()
+    {
+        _storage.Save(new ClockAnchor(DateTime.MaxValue.AddMinutes(-1d), TimeSpan.FromHours(1d), "1"));
+
+        var clock = CreateClock();
+
+        Assert.Equal(s_start, clock.UtcNow);
+    }
+
     private Clock CreateClock()
     {
         var clock = new Clock(_device, _storage, _application);

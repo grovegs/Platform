@@ -4,6 +4,8 @@ namespace GroveGames.Platform;
 
 public sealed class Clock : IClock, IDisposable
 {
+    private static readonly DateTime s_latestStoredUtcNow = DateTime.MaxValue.AddYears(-100);
+
     private readonly IClockDevice _device;
     private readonly IClockStorage _storage;
     private readonly IApplication _application;
@@ -44,19 +46,20 @@ public sealed class Clock : IClock, IDisposable
 
     private void Anchor(TimeSpan timeSinceBoot)
     {
-        var hasStored = _storage.TryLoad(out var stored);
-        _isAnchored = true;
+        var hasStored = _storage.TryLoad(out var stored) && stored.UtcNow <= s_latestStoredUtcNow;
 
         if (hasStored && !string.IsNullOrEmpty(stored.BootId) && stored.BootId == _device.BootId && timeSinceBoot >= stored.TimeSinceBoot)
         {
             _anchorUtcNow = stored.UtcNow;
             _anchorTimeSinceBoot = stored.TimeSinceBoot;
+            _isAnchored = true;
             return;
         }
 
         var utcNow = _device.UtcNow;
         _anchorUtcNow = hasStored && utcNow < stored.UtcNow ? stored.UtcNow : utcNow;
         _anchorTimeSinceBoot = timeSinceBoot;
+        _isAnchored = true;
         Save();
     }
 

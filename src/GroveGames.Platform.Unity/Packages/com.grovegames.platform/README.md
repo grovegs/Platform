@@ -83,6 +83,7 @@ builder.AddClock();
 builder.AddDisplay();
 ```
 
+- With [GroveGames.DeveloperTools](https://github.com/grovegs/DeveloperTools) installed and `GROVEGAMES_DEVELOPERTOOLS` defined, `AddApplication()` also registers the Platform options, a time scale slider.
 - `AddClock()` needs `AddApplication()`. With [GroveGames.Database](https://github.com/grovegs/Database) installed it stores its state there and needs the database registered; otherwise it uses PlayerPrefs. State saved in PlayerPrefs is not moved to the database, so the first launch after adding GroveGames.Database takes the device time.
 - The default target frame rate and sleep timeout are in Project Settings > GroveGames > Platform, stored in a `UnityPlatformSettings` asset, which implements `IPlatformSettings`.
 - `UnityEnvironment.IsEditor`, `IsDevelopment` and `IsProduction` are constants, so the compiler removes the branch that does not apply. A build is a development build when the `DEVELOPMENT` symbol is defined. `UnityEnvironment.Current` is the same information as a core `Environment`.

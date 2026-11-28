@@ -31,7 +31,11 @@ namespace GroveGames.Platform.Unity
 #else
             builder.AddSingleton<IClockStorage, PlayerPrefsClockStorage>();
 #endif
-            return builder.AddSingleton<IClock, Clock>();
+            builder.AddSingleton<Clock>();
+#if GROVEGAMES_DEVELOPERTOOLS
+            builder.AddDeveloperOptions<ClockDeveloperOptions>();
+#endif
+            return builder.AddSingleton<IClock>(resolver => resolver.Resolve<Clock>());
         }
 
         public static IContainerBuilder AddDisplay(this IContainerBuilder builder)

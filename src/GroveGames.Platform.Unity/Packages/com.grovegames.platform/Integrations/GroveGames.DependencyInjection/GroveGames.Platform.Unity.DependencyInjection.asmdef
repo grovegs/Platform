@@ -4,7 +4,9 @@
     "references": [
         "GUID:0061d69520314709954536f1b0695e12",
         "GUID:680da9f8e63646ddb3c20c2f4045387d",
-        "GroveGames.Platform.Unity.Database"
+        "GroveGames.Platform.Unity.Database",
+        "GroveGames.Platform.Unity.DeveloperTools",
+        "GroveGames.DeveloperTools.Unity.DependencyInjection"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

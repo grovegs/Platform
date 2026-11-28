@@ -1,5 +1,8 @@
 using GroveGames.DependencyInjection;
 using GroveGames.DependencyInjection.Unity;
+#if GROVEGAMES_DEVELOPERTOOLS
+using GroveGames.DeveloperTools.Unity;
+#endif
 
 namespace GroveGames.Platform.Unity
 {
@@ -8,6 +11,9 @@ namespace GroveGames.Platform.Unity
         public static IContainerBuilder AddApplication(this IContainerBuilder builder)
         {
             builder.AddSingleton<IApplicationDevice>(resolver => resolver.Instantiate<UnityApplicationDevice>());
+#if GROVEGAMES_DEVELOPERTOOLS
+            builder.AddDeveloperOptions<PlatformDeveloperOptions>();
+#endif
             return builder.AddSingleton<IApplication, Application>();
         }
 

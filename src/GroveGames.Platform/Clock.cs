@@ -29,6 +29,24 @@ public sealed class Clock : IClock, IDisposable
         Save();
     }
 
+    public void Advance(TimeSpan duration)
+    {
+        if (duration <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(duration), duration, "The clock only moves forward.");
+        }
+
+        var timeSinceBoot = _device.TimeSinceBoot;
+
+        if (!_isAnchored)
+        {
+            Anchor(timeSinceBoot);
+        }
+
+        _anchorUtcNow += duration;
+        Save();
+    }
+
     public DateTime GetDeviceTime(DateTime utcTime)
     {
         return _device.UtcNow + (utcTime - UtcNow);

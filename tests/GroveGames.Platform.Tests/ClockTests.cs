@@ -43,6 +43,40 @@ public sealed class ClockTests : IDisposable
     }
 
     [Fact]
+    public void Advance_Duration_MovesUtcNowForward()
+    {
+        var clock = CreateClock();
+        _ = clock.UtcNow;
+
+        clock.Advance(TimeSpan.FromDays(1d));
+
+        Assert.Equal(s_start.AddDays(1d), clock.UtcNow);
+    }
+
+    [Fact]
+    public void Advance_ThenRestartedInSameBoot_KeepsTheAdvance()
+    {
+        var clock = CreateClock();
+        clock.Advance(TimeSpan.FromHours(1d));
+        clock.Dispose();
+        _clocks.Remove(clock);
+
+        var restarted = CreateClock();
+
+        Assert.Equal(s_start.AddHours(1d), restarted.UtcNow);
+    }
+
+    [Fact]
+    public void Advance_NotForward_Throws()
+    {
+        var clock = CreateClock();
+
+        var exception = Record.Exception(() => clock.Advance(TimeSpan.Zero));
+
+        Assert.IsType<ArgumentOutOfRangeException>(exception);
+    }
+
+    [Fact]
     public void UtcNow_TimePasses_FollowsTimeSinceBoot()
     {
         var clock = CreateClock();
